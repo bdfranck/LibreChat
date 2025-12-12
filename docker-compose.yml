@@ -14,6 +14,8 @@ services:
     user: "${UID}:${GID}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
     environment:
       - HOST=0.0.0.0
       - MONGO_URI=mongodb://mongodb:27017/LibreChat
@@ -24,8 +26,12 @@ services:
       - type: bind
         source: ./.env
         target: /app/.env
+      - type: bind
+        source: ./librechat.yaml
+        target: /app/librechat.yaml
       - ./images:/app/client/public/images
       - ./uploads:/app/uploads
+      - ./logs:/app/api/logs
       - ./logs:/app/logs
   mongodb:
     container_name: chat-mongodb
